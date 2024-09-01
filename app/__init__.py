@@ -15,7 +15,7 @@ def create_app(config_name='default'):
     from .models import Task, Status
     create_db(app)
     register_cli(app, db)
-    
+
     return app
 
 def create_db(app: Flask):
@@ -81,3 +81,9 @@ def register_cli(app: Flask, db: SQLAlchemy):
             for task in tasks:
                 if task.status_id == status_obj.id:
                     click.echo(f'{task.id}: {task.description} ({status_obj.description})')
+                    
+    @app.cli.command('seed')
+    def seed():
+        from .seeders import seed_statuses
+        seed_statuses()
+        click.echo('Seed data added successfully')
